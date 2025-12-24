@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<style>
+body{
+  font-family:Arial;
+  background:linear-gradient(135deg,#667eea,#764ba2);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  overflow: hidden;
+}
+
+.box{
+  background:#fff;
+  padding:25px;
+  width:320px;
+  border-radius:8px;
+  box-shadow:0 8px 20px rgba(0,0,0,.2);
+}
+
+h3{text-align:center;margin-bottom:15px;}
+
+input{
+  width:100%;
+  padding:9px;
+  margin-top:8px;
+  box-sizing:border-box;
+}
+
+button{
+  width:100%;
+  padding:9px;
+  margin-top:12px;
+  background:#667eea;
+  border:none;
+  color:#fff;
+  cursor:pointer;
+  border-radius:4px;
+}
+
+button:hover{opacity:.9;}
+
+a{
+  color:#667eea;
+  text-decoration:none;
+  font-size:12px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="box">
+<h3 style="text-align:center">Login</h3>
+
+<input id="user" placeholder="Username / NIS">
+<input id="pass" type="password" placeholder="Password">
+<button onclick="login()">Masuk</button>
+
+<p style="text-align:center">
+<a href= "register.html"> Buat akun</a>
+</p>
+</div>
+
+<script>
+function login(){
+  let u=user.value.trim();
+  let p=pass.value;
+
+  let users=JSON.parse(localStorage.getItem("users"))||{};
+
+  if(!users[u]){
+    alert("Username tidak ditemukan");
+    return;
+  }
+
+  if(users[u]!==p){
+    alert("Password salah");
+    return;
+  }
+
+  localStorage.setItem("loginUser",u);
+  location.href="laporan.html";
+}
+</script>
+
+</body>
+</html>

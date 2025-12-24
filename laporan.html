@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta charset="UTF-8">
+<title>Laporan</title>
+
+<style>
+body{
+    
+    font-family:Arial;
+    font-size:11px;
+}
+
+table{
+    border-collapse:collapse;
+    width:100%;
+    overflow-x:auto;
+    white-space:nowrap;
+    
+    
+}
+
+
+th,td{
+    border:1px solid #000;
+    padding:4px;
+    text-align:center;
+}
+
+th{
+    background:#eee;}
+.left{
+    text-align:left;
+    }
+</style>
+
+<script>
+let user="";
+
+function cekLogin(){
+  user=localStorage.getItem("loginUser");
+  if(!user) location.href="login.html";
+}
+
+function save(){
+  let data={};
+  document.querySelectorAll("input").forEach(i=>{
+    if(i.type==="checkbox") data[i.id]=i.checked;
+    else data[i.id]=i.value;
+  });
+  localStorage.setItem("laporan_"+user,JSON.stringify(data));
+}
+
+function load(){
+  let data=JSON.parse(localStorage.getItem("laporan_"+user));
+  if(!data) return;
+  Object.keys(data).forEach(id=>{
+    let el=document.getElementById(id);
+    if(el){
+      if(el.type==="checkbox") el.checked=data[id];
+      else el.value=data[id];
+    }
+  });
+}
+
+window.onload=function(){
+  cekLogin(); // ambil username dari login
+  document.getElementById("userAktif").innerText = user;
+  load();
+};
+
+
+function logout(){
+  if(confirm("Yakin ingin logout?")){
+    localStorage.removeItem("loginUser");
+    location.href="login.html";
+  }
+}
+
+document.getElementById("userAktif").innerText = user;
+
+</script>
+</head>
+
+<body>
+
+    <div style="
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  gap:10px;
+  margin-bottom:8px;
+  font-size:12px;
+">
+  Login sebagai: <b id="userAktif"></b>
+  <button onclick="logout()">Logout</button>
+</div>
+
+
+
+
+<h3 style="text-align:center">
+LAPORAN KEGIATAN LIBUR SEMESTER GANJIL<br>
+TAHUN AJARAN 2025/2026
+</h3>
+
+<table>
+<tr>
+<td class="left">Nama</td>
+<td><input id="nama" oninput="save()"></td>
+<td class="left">Kelas</td>
+<td><input id="kelas" oninput="save()"></td>
+</tr>
+</table>
+
+<br>
+
+<table>
+<tr>
+<th>No</th><th>Kegiatan</th>
+<th>22</th><th>23</th><th>24</th><th>25</th><th>26</th>
+<th>27</th><th>28</th><th>29</th><th>30</th><th>31</th>
+<th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+</tr>
+
+<script>
+const kegiatan=[
+"Salat 5 waktu",
+"Salat sunnah, Fajr, Duha dan witir, Tahajud",
+"zikir pagi petang",
+"Membaca iqro/ Al-Quran",
+"Berwudu sebelum tidur dan membaca do'a sebelum dan sesudah tidur",
+"Merapikan tempat tidur",
+"Mengajak abi dan umi untuk solat tepat waktu",
+"Merapikan kamar/rumah",
+"Membantu menyiapkan makan / minum untuk Abi dan Umi",
+"Mendoakan kebaikan untuk Abi dan Umi",
+"Mencium kening Abi atau Umi dan mengucapkan aku sayang Abi dan Umi",
+"Muroja’ah hafalan Al-Qur’an",
+"Muroja’ah doa dan dalil",
+"Muroja’ah hafalan matan tauhid",
+"Muroja’ah hafalan matan Tuhfatul Athfal",
+"Olahraga",
+"Story and reading book",
+"Berkunjung ke rumah teman / saudara / kerabat",
+"Mengaji Al-Qur’an",
+"Mendengarkan kajian",
+"Membuat eksperimen / prakarya dari barang-barang yang sudah tidak dipakai",
+"Berkegiatan tanpa Gadget",
+];
+
+
+kegiatan.forEach((k,i)=>{
+  document.write("<tr><td>"+(i+1)+"</td><td class='left'>"+k+"</td>");
+  for(let d=1;d<=15;d++){
+    document.write("<td><input type='checkbox' id='k"+i+"_"+d+"' onclick='save()'></td>");
+  }
+  document.write("</tr>");
+});
+
+
+</script>
+</table>
+
+</body>
+</html>  
