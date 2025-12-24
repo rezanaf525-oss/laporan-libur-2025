@@ -66,27 +66,28 @@ a{
 </p>
 </div>
 
-<script>
-function register(){
-  let u=user.value.trim();
-  let p=pass.value;
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
-  if(!u || !p){
-    alert("Isi username dan password");
-    return;
+  const firebaseConfig = { /* SAMA PERSIS */ };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  window.register = function(){
+    let email = user.value.trim() + "@laporan.com";
+    let password = pass.value;
+
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(()=>{
+        alert("Akun berhasil dibuat");
+        location.href="index.html";
+      })
+      .catch(err=>{
+        alert(err.message);
+      });
   }
-
-  let users=JSON.parse(localStorage.getItem("users"))||{};
-  if(users[u]){
-    alert("Username sudah terdaftar");
-    return;
-  }
-
-  users[u]=p;
-  localStorage.setItem("users",JSON.stringify(users));
-  alert("Akun berhasil dibuat");
-  location.href="index.html";
-}
 </script>
 
 </body>
