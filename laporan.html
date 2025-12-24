@@ -40,7 +40,7 @@ let user="";
 
 function cekLogin(){
   user=localStorage.getItem("loginUser");
-  if(!user) location.href="login.html";
+  if(!user) location.href="index.html";
 }
 
 function save(){
@@ -74,7 +74,7 @@ window.onload=function(){
 function logout(){
   if(confirm("Yakin ingin logout?")){
     localStorage.removeItem("loginUser");
-    location.href="login.html";
+    location.href="index.html";
   }
 }
 
