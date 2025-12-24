@@ -1,110 +1,63 @@
 <!DOCTYPE html>
 <html lang="id">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Laporan</title>
 
 <style>
 body{
-    
-    font-family:Arial;
-    font-size:11px;
+  font-family: Arial;
+  font-size: 11px;
+  margin: 10px;
 }
 
-table{
-    border-collapse:collapse;
-    width:100%;
-    overflow-x:auto;
-    white-space:nowrap;
-    
-    
-}
-
-
-th,td{
-    border:1px solid #000;
-    padding:4px;
-    text-align:center;
-}
-
-th{
-    background:#eee;}
-.left{
-    text-align:left;
-    }
-</style>
-
-<script>
-let user="";
-
-function cekLogin(){
-  user=localStorage.getItem("loginUser");
-  if(!user) location.href="index.html";
-}
-
-function save(){
-  let data={};
-  document.querySelectorAll("input").forEach(i=>{
-    if(i.type==="checkbox") data[i.id]=i.checked;
-    else data[i.id]=i.value;
-  });
-  localStorage.setItem("laporan_"+user,JSON.stringify(data));
-}
-
-function load(){
-  let data=JSON.parse(localStorage.getItem("laporan_"+user));
-  if(!data) return;
-  Object.keys(data).forEach(id=>{
-    let el=document.getElementById(id);
-    if(el){
-      if(el.type==="checkbox") el.checked=data[id];
-      else el.value=data[id];
-    }
-  });
-}
-
-window.onload=function(){
-  cekLogin(); // ambil username dari login
-  document.getElementById("userAktif").innerText = user;
-  load();
-};
-
-
-function logout(){
-  if(confirm("Yakin ingin logout?")){
-    localStorage.removeItem("loginUser");
-    location.href="index.html";
-  }
-}
-
-document.getElementById("userAktif").innerText = user;
-
-</script>
-</head>
-
-<body>
-
-    <div style="
+.header{
   display:flex;
   justify-content:flex-end;
   align-items:center;
   gap:10px;
   margin-bottom:8px;
   font-size:12px;
-">
-  Login sebagai: <b id="userAktif"></b>
+}
+
+table{
+  border-collapse:collapse;
+  width:100%;
+  overflow-x:auto;
+  white-space:nowrap;
+}
+
+th,td{
+  border:1px solid #000;
+  padding:4px;
+  text-align:center;
+}
+
+th{
+  background:#eee;
+}
+
+.left{
+  text-align:left;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER LOGIN -->
+<div class="header">
+  Login sebagai: <b id="userAktif">-</b>
   <button onclick="logout()">Logout</button>
 </div>
-
-
-
 
 <h3 style="text-align:center">
 LAPORAN KEGIATAN LIBUR SEMESTER GANJIL<br>
 TAHUN AJARAN 2025/2026
 </h3>
 
+<!-- IDENTITAS -->
 <table>
 <tr>
 <td class="left">Nama</td>
@@ -116,6 +69,7 @@ TAHUN AJARAN 2025/2026
 
 <br>
 
+<!-- TABEL KEGIATAN -->
 <table>
 <tr>
 <th>No</th><th>Kegiatan</th>
@@ -127,41 +81,97 @@ TAHUN AJARAN 2025/2026
 <script>
 const kegiatan=[
 "Salat 5 waktu",
-"Salat sunnah, Fajr, Duha dan witir, Tahajud",
-"zikir pagi petang",
-"Membaca iqro/ Al-Quran",
-"Berwudu sebelum tidur dan membaca do'a sebelum dan sesudah tidur",
+"Salat sunnah (Fajr, Duha, Witir, Tahajud)",
+"Zikir pagi dan petang",
+"Membaca Iqro / Al-Qur’an",
+"Berwudu & doa sebelum/sesudah tidur",
 "Merapikan tempat tidur",
-"Mengajak abi dan umi untuk solat tepat waktu",
-"Merapikan kamar/rumah",
-"Membantu menyiapkan makan / minum untuk Abi dan Umi",
-"Mendoakan kebaikan untuk Abi dan Umi",
-"Mencium kening Abi atau Umi dan mengucapkan aku sayang Abi dan Umi",
+"Mengajak Abi & Umi salat tepat waktu",
+"Merapikan kamar / rumah",
+"Membantu menyiapkan makan/minum",
+"Mendoakan kebaikan untuk Abi & Umi",
+"Mencium kening Abi/Umi & mengucapkan sayang",
 "Muroja’ah hafalan Al-Qur’an",
 "Muroja’ah doa dan dalil",
-"Muroja’ah hafalan matan tauhid",
-"Muroja’ah hafalan matan Tuhfatul Athfal",
+"Muroja’ah matan tauhid",
+"Muroja’ah Tuhfatul Athfal",
 "Olahraga",
 "Story and reading book",
-"Berkunjung ke rumah teman / saudara / kerabat",
+"Berkunjung ke rumah teman/kerabat",
 "Mengaji Al-Qur’an",
 "Mendengarkan kajian",
-"Membuat eksperimen / prakarya dari barang-barang yang sudah tidak dipakai",
-"Berkegiatan tanpa Gadget",
+"Membuat eksperimen / prakarya",
+"Berkegiatan tanpa gadget"
 ];
-
 
 kegiatan.forEach((k,i)=>{
   document.write("<tr><td>"+(i+1)+"</td><td class='left'>"+k+"</td>");
-  for(let d=1;d<=15;d++){
+  for(let d=1; d<=15; d++){
     document.write("<td><input type='checkbox' id='k"+i+"_"+d+"' onclick='save()'></td>");
   }
   document.write("</tr>");
 });
-
-
 </script>
 </table>
 
+<!-- SAVE & LOAD -->
+<script>
+function save(){
+  let data={};
+  document.querySelectorAll("input").forEach(i=>{
+    data[i.id] = (i.type==="checkbox") ? i.checked : i.value;
+  });
+  localStorage.setItem("laporan_data", JSON.stringify(data));
+}
+
+function load(){
+  let data = JSON.parse(localStorage.getItem("laporan_data"));
+  if(!data) return;
+  Object.keys(data).forEach(id=>{
+    let el=document.getElementById(id);
+    if(el){
+      el.type==="checkbox" ? el.checked=data[id] : el.value=data[id];
+    }
+  });
+}
+
+window.onload = load;
+</script>
+
+<!-- FIREBASE AUTH -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBzLuhR2fKyrPpPHEoVyvJS35RaX1pizmQ",
+  authDomain: "laporan-libur.firebaseapp.com",
+  projectId: "laporan-libur",
+  storageBucket: "laporan-libur.firebasestorage.app",
+  messagingSenderId: "867027958066",
+  appId: "1:867027958066:web:93a7b424c642173f0a7f2b"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// CEK LOGIN
+onAuthStateChanged(auth, user=>{
+  if(!user){
+    location.href="index.html";
+  }else{
+    document.getElementById("userAktif").innerText =
+      user.email.replace("@laporan.com","");
+  }
+});
+
+// LOGOUT
+window.logout = function(){
+  signOut(auth).then(()=>{
+    location.href="index.html";
+  });
+};
+</script>
+
 </body>
-</html>  
+</html>
