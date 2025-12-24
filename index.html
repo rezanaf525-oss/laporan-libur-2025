@@ -52,6 +52,9 @@ a{
 </style>
 
 </head>
+
+
+
 <body>
 
 <div class="box">
@@ -66,27 +69,35 @@ a{
 </p>
 </div>
 
-<script>
-function login(){
-  let u=user.value.trim();
-  let p=pass.value;
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
-  let users=JSON.parse(localStorage.getItem("users"))||{};
+    const firebaseConfig = {
+      apiKey: "AIzaSy...",
+      authDomain: "laporan-libur.firebaseapp.com",
+      projectId: "laporan-libur",
+      storageBucket: "laporan-libur.firebasestorage.app",
+      messagingSenderId: "867027958066",
+      appId: "1:867027958066:web:93a7b424c642173f0a7f2b"
+    };
 
-  if(!users[u]){
-    alert("Username tidak ditemukan");
-    return;
-  }
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-  if(users[u]!==p){
-    alert("Password salah");
-    return;
-  }
+    window.login = function(){
+      let email = user.value.trim() + "@laporan.com";
+      let password = pass.value;
 
-  localStorage.setItem("loginUser",u);
-  location.href="laporan.html";
-}
-</script>
+      signInWithEmailAndPassword(auth, email, password)
+        .then(()=>{
+          location.href = "laporan.html";
+        })
+        .catch(()=>{
+          alert("Username atau password salah");
+        });
+    }
+  </script>
 
 </body>
 </html>
