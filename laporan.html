@@ -24,7 +24,6 @@ body{
 table{
   border-collapse:collapse;
   width:100%;
-  overflow-x:auto;
   white-space:nowrap;
 }
 
@@ -46,7 +45,7 @@ th{
 
 <body>
 
-<!-- HEADER LOGIN -->
+<!-- HEADER -->
 <div class="header">
   Login sebagai: <b id="userAktif">-</b>
   <button onclick="logout()">Logout</button>
@@ -70,16 +69,18 @@ TAHUN AJARAN 2025/2026
 <br>
 
 <!-- TABEL KEGIATAN -->
-<table>
+<table id="tabelKegiatan">
 <tr>
 <th>No</th><th>Kegiatan</th>
 <th>22</th><th>23</th><th>24</th><th>25</th><th>26</th>
 <th>27</th><th>28</th><th>29</th><th>30</th><th>31</th>
 <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
 </tr>
+</table>
 
+<!-- SCRIPT TABEL -->
 <script>
-const kegiatan=[
+const kegiatan = [
 "Salat 5 waktu",
 "Salat sunnah (Fajr, Duha, Witir, Tahajud)",
 "Zikir pagi dan petang",
@@ -104,38 +105,48 @@ const kegiatan=[
 "Berkegiatan tanpa gadget"
 ];
 
+const tabel = document.getElementById("tabelKegiatan");
+
 kegiatan.forEach((k,i)=>{
-  document.write("<tr><td>"+(i+1)+"</td><td class='left'>"+k+"</td>");
+  const row = tabel.insertRow();
+  row.insertCell().innerText = i+1;
+  const keg = row.insertCell();
+  keg.innerText = k;
+  keg.className = "left";
+
   for(let d=1; d<=15; d++){
-    document.write("<td><input type='checkbox' id='k"+i+"_"+d+"' onclick='save()'></td>");
+    const c = row.insertCell();
+    c.innerHTML = `<input type="checkbox" id="k${i}_${d}" onclick="save()">`;
   }
-  document.write("</tr>");
 });
 </script>
-</table>
 
 <!-- SAVE & LOAD -->
 <script>
+let currentUserId = null;
+
 function save(){
-  let data={};
+  if(!currentUserId) return;
+
+  let data = {};
   document.querySelectorAll("input").forEach(i=>{
-    data[i.id] = (i.type==="checkbox") ? i.checked : i.value;
+    data[i.id] = (i.type === "checkbox") ? i.checked : i.value;
   });
-  localStorage.setItem("laporan_data", JSON.stringify(data));
+
+  localStorage.setItem("laporan_" + currentUserId, JSON.stringify(data));
 }
 
 function load(){
-  let data = JSON.parse(localStorage.getItem("laporan_data"));
+  let data = JSON.parse(localStorage.getItem("laporan_" + currentUserId));
   if(!data) return;
+
   Object.keys(data).forEach(id=>{
-    let el=document.getElementById(id);
+    let el = document.getElementById(id);
     if(el){
-      el.type==="checkbox" ? el.checked=data[id] : el.value=data[id];
+      el.type === "checkbox" ? el.checked = data[id] : el.value = data[id];
     }
   });
 }
-
-window.onload = load;
 </script>
 
 <!-- FIREBASE AUTH -->
@@ -155,17 +166,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// CEK LOGIN
 onAuthStateChanged(auth, user=>{
   if(!user){
-    location.href="index.html";
+    location.href = "index.html";
   }else{
+    currentUserId = user.uid;
     document.getElementById("userAktif").innerText =
       user.email.replace("@laporan.com","");
+    load(); // LOAD DATA SETELAH LOGIN
   }
 });
 
-// LOGOUT
 window.logout = function(){
   signOut(auth).then(()=>{
     location.href="index.html";
