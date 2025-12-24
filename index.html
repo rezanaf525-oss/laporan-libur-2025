@@ -2,7 +2,9 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login</title>
+
 <style>
 body{
   font-family:Arial;
@@ -11,9 +13,8 @@ body{
   justify-content:center;
   align-items:center;
   height:100vh;
-  overflow: hidden;
+  overflow:hidden;
 }
-
 .box{
   background:#fff;
   padding:25px;
@@ -21,83 +22,55 @@ body{
   border-radius:8px;
   box-shadow:0 8px 20px rgba(0,0,0,.2);
 }
-
 h3{text-align:center;margin-bottom:15px;}
-
-input{
-  width:100%;
-  padding:9px;
-  margin-top:8px;
-  box-sizing:border-box;
-}
-
+input{width:100%;padding:9px;margin-top:8px;}
 button{
-  width:100%;
-  padding:9px;
-  margin-top:12px;
-  background:#667eea;
-  border:none;
-  color:#fff;
-  cursor:pointer;
-  border-radius:4px;
+  width:100%;padding:9px;margin-top:12px;
+  background:#667eea;border:none;color:#fff;
+  border-radius:4px;cursor:pointer;
 }
-
-button:hover{opacity:.9;}
-
-a{
-  color:#667eea;
-  text-decoration:none;
-  font-size:12px;
-}
+a{font-size:12px;color:#667eea;text-decoration:none;}
 </style>
-
 </head>
 
-
-
 <body>
-
 <div class="box">
-<h3 style="text-align:center">Login</h3>
-
-<input id="user" placeholder="Username / NIS">
-<input id="pass" type="password" placeholder="Password">
-<button onclick="login()">Masuk</button>
-
-<p style="text-align:center">
-<a href= "register.html"> Buat akun</a>
-</p>
+  <h3>Login</h3>
+  <input id="user" placeholder="Username / NIS">
+  <input id="pass" type="password" placeholder="Password">
+  <button onclick="login()">Masuk</button>
+  <p style="text-align:center"><a href="register.html">Buat akun</a></p>
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } 
+from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSy...",
-      authDomain: "laporan-libur.firebaseapp.com",
-      projectId: "laporan-libur",
-      storageBucket: "laporan-libur.firebasestorage.app",
-      messagingSenderId: "867027958066",
-      appId: "1:867027958066:web:93a7b424c642173f0a7f2b"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyBzLuhR2fKyrPpPHEoVyvJS35RaX1pizmQ",
+  authDomain: "laporan-libur.firebaseapp.com",
+  projectId: "laporan-libur",
+  storageBucket: "laporan-libur.firebasestorage.app",
+  messagingSenderId: "867027958066",
+  appId: "1:867027958066:web:93a7b424c642173f0a7f2b"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-    window.login = function(){
-      let email = user.value.trim() + "@laporan.com";
-      let password = pass.value;
+// auto redirect jika sudah login
+onAuthStateChanged(auth, user=>{
+  if(user) location.href="laporan.html";
+});
 
-      signInWithEmailAndPassword(auth, email, password)
-        .then(()=>{
-          location.href = "laporan.html";
-        })
-        .catch(()=>{
-          alert("Username atau password salah");
-        });
-    }
-  </script>
-
+window.login = function(){
+  const email = user.value.trim()+"@laporan.com";
+  const password = pass.value;
+  signInWithEmailAndPassword(auth,email,password)
+    .then(()=>location.href="laporan.html")
+    .catch(()=>alert("Username atau password salah"));
+}
+</script>
 </body>
 </html>
