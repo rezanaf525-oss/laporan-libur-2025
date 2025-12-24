@@ -36,8 +36,7 @@ button{background:#667eea;border:none;color:#fff;}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } 
-from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBzLuhR2fKyrPpPHEoVyvJS35RaX1pizmQ",
@@ -52,21 +51,27 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 window.register = function(){
-  const email = user.value.trim()+"@laporan.com";
+  const username = user.value.trim();
   const password = pass.value;
 
-  if(password.length < 6){
-    alert("Password minimal 6 karakter");
+  if(username === "" || password === ""){
+    alert("Username dan password wajib diisi");
     return;
   }
 
-  createUserWithEmailAndPassword(auth,email,password)
+  const email = username + "@laporan.com";
+
+  createUserWithEmailAndPassword(auth, email, password)
     .then(()=>{
       alert("Akun berhasil dibuat");
-      location.href="index.html";
+      location.href = "index.html";
     })
-    .catch(err=>alert(err.message));
-}
+    .catch(err=>{
+      alert(err.message);
+    });
+};
 </script>
+
 </body>
 </html>
+
